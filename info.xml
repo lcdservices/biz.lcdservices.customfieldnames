@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<extension key="biz.lcdservices.customfieldnames" type="module">
+  <file>customfieldnames</file>
+  <name>Custom Field Names</name>
+  <description>Exposes the machine name and table/column name fields to the UI for custom data sets and fields. This provides developers and power users more control over custom field construction.</description>
+  <license>AGPL-3.0</license>
+  <maintainer>
+    <author>Lighthouse Consulting and Design</author>
+    <email>dev@lcdservices.biz</email>
+  </maintainer>
+  <urls>
+    <url desc="Main Extension Page">https://github.com/lcdservices/biz.lcdservices.customfieldnames</url>
+    <url desc="Documentation">https://github.com/lcdservices/biz.lcdservices.customfieldnames/blob/master/README.md</url>
+    <url desc="Support">https://github.com/lcdservices/biz.lcdservices.customfieldnames/issues</url>
+    <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
+  </urls>
+  <releaseDate>2018-04-07</releaseDate>
+  <version>1.0</version>
+  <develStage>alpha</develStage>
+  <compatibility>
+    <ver>4.7</ver>
+  </compatibility>
+  <comments></comments>
+  <civix>
+    <namespace>CRM/LCD/Customfieldnames</namespace>
+  </civix>
+</extension>
