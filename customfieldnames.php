@@ -151,3 +151,26 @@ function customfieldnames_civicrm_navigationMenu(&$menu) {
   ));
   _customfieldnames_civix_navigationMenu($menu);
 } // */
+
+/**
+ * Implements hook_civicrm_buildForm().
+ *
+ * @param string $formName
+ * @param CRM_Core_Form $form
+ */
+function customfieldnames_civicrm_buildForm($formName, &$form) {
+  _customfieldnames_civix_civicrm_buildForm($formName, $form);
+}
+
+/**
+ * Implements hook_civicrm_validateForm().
+ *
+ * @param string $formName
+ * @param array $fields
+ * @param array $files
+ * @param CRM_Core_Form $form
+ * @param array $errors
+ */
+function customfieldnames_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
+  _customfieldnames_civix_civicrm_validateForm($formName, $fields, $files, $form, $errors);
+}
