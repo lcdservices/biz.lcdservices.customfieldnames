@@ -411,6 +411,10 @@ function _customfieldnames_civix_civicrm_validateForm($formName, &$fields, &$fil
       $error_message = ts( 'Set Group Name is a required field' );
       $form->setElementError('name', $error_message);
     }
+    elseif ( ($group_id = _customfieldnames_civix_civicrm_get_group_id($group_name)) > 0 ) {
+      $error_message= ts("Cannot create custom group because %1 is already exists.", array('1' => $group_name));
+      $form->setElementError('name', $error_message);
+    }
   }
   // Form validation for Custom fields for a Custom Data Set
   if($formName == 'CRM_Custom_Form_Field' && ($form->getAction() == CRM_Core_Action::ADD) ) {
@@ -421,18 +425,42 @@ function _customfieldnames_civix_civicrm_validateForm($formName, &$fields, &$fil
       $error_message = ts( 'Set Column Name is a required field' );
       $form->setElementError('column_name', $error_message);
     }
-    elseif ( ($field_id = _customfieldnames_civix_civicrm_get_custom_field_id($gid, $column_name)) > 0 ) {
-      $error_message= ts("Cannot create custom field because %1 is already exists.", array('1' => $column_name));
+    elseif ( ($field_id = _customfieldnames_civix_civicrm_get_custom_column_field_id($gid, $column_name)) > 0 ) {
+      $error_message= ts("Cannot create custom column because %1 is already exists.", array('1' => $column_name));
       $form->setElementError('column_name', $error_message);
     }
     //validation for Field name
     $field_name = CRM_Utils_Array::value( 'name', $fields );
     if (! $field_name ) {
-      $error_message = ts( 'Set Group Name is a required field' );
+      $error_message = ts( 'Set Field Name is a required field' );
+      $form->setElementError('name', $error_message);
+    }
+    elseif ( ($field_id = _customfieldnames_civix_civicrm_get_custom_name_field_id($gid, $field_name)) > 0 ) {
+      $error_message= ts("Cannot create custom field because %1 is already exists.", array('1' => $field_name));
       $form->setElementError('name', $error_message);
     }
   }
   return;
+}
+/**
+ * See if a CiviCRM custom field group exists
+ *
+ * @param string $group_name
+ *   custom field group name to look for, corresponds to field civicrm_custom_group.name
+ * @return integer
+ *   custom field group id if it exists, else zero
+ */
+function _customfieldnames_civix_civicrm_get_group_id($group_name){
+  $result = 0;
+  $diff = array();
+  $data = array(
+    'name' => $group_name,
+  );
+  $custom_group = CRM_Core_BAO_CustomGroup::retrieve($data, $diff);
+  if( isset($custom_group) ){
+    $result = $custom_group->id;
+  }
+  return $result;
 }
 /**
  * See if a CiviCRM custom field exists
@@ -444,12 +472,36 @@ function _customfieldnames_civix_civicrm_validateForm($formName, &$fields, &$fil
  * @return integer
  *   custom field id if it exists, else zero
  */
-function _customfieldnames_civix_civicrm_get_custom_field_id($custom_group_id, $field_name) {
+function _customfieldnames_civix_civicrm_get_custom_column_field_id($custom_group_id, $column_name) {
   $result = 0;
   $diff = array();
   $data = array(
     'custom_group_id' => $custom_group_id,
-    'column_name' => $field_name,
+    'column_name' => $column_name,
+  );
+  $field_value = CRM_Core_BAO_CustomField::retrieve($data, $diff);
+  if( isset($field_value) ) {
+    $result = $field_value->id;
+  }
+  return $result;
+}
+
+/**
+ * See if a CiviCRM custom field exists
+ *
+ * @param integer $custom_group_id
+ *   custom group id that the field is expected to belong to
+ * @param string $name
+ *   custom field name to look for, corresponds to field civicrm_custom_field.column_name
+ * @return integer
+ *   custom field id if it exists, else zero
+ */
+function _customfieldnames_civix_civicrm_get_custom_name_field_id($custom_group_id, $field_name) {
+  $result = 0;
+  $diff = array();
+  $data = array(
+    'custom_group_id' => $custom_group_id,
+    'name' => $field_name,
   );
   $field_value = CRM_Core_BAO_CustomField::retrieve($data, $diff);
   if( isset($field_value) ) {
