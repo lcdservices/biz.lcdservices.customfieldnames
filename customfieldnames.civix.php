@@ -390,7 +390,7 @@ function _customfieldnames_civix_civicrm_buildForm($formName, &$form) {
  */
 function _customfieldnames_civix_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
   // Form validation for Custom Data Set
-  if ($formName == 'CRM_Custom_Form_Group') {
+  if ($formName == 'CRM_Custom_Form_Group' && ($form->getAction() == CRM_Core_Action::ADD) ) {
     //validation for Group table name
     $table_name = CRM_Utils_Array::value( 'table_name', $fields );
     if (! $table_name ) {
@@ -413,7 +413,7 @@ function _customfieldnames_civix_civicrm_validateForm($formName, &$fields, &$fil
     }
   }
   // Form validation for Custom fields for a Custom Data Set
-  if($formName == 'CRM_Custom_Form_Field') {
+  if($formName == 'CRM_Custom_Form_Field' && ($form->getAction() == CRM_Core_Action::ADD) ) {
     $gid = $form->getVar( '_gid' );
     //validation for Field Column name
     $column_name = CRM_Utils_Array::value( 'column_name', $fields );
