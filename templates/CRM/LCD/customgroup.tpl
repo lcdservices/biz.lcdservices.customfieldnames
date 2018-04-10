@@ -1,5 +1,5 @@
 {* FILE: customfieldnames/templates/customgroupfield.tpl to add custom field for custom data set*}
-<table id="custom-fields" class="form-layout">
+<table id="lcd-custom-fields" class="form-layout">
   <tbody>
     <tr id="table_name-tr">
       <td class="label">{$form.table_name.label}</td>
@@ -14,5 +14,5 @@
 </table>
 
 <script type="text/javascript">
-  cj('#custom-fields').insertAfter('div.crm-submit-buttons:first');
+  cj('#lcd-custom-fields').insertAfter('div.crm-submit-buttons:first');
 </script>

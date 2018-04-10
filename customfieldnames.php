@@ -159,7 +159,30 @@ function customfieldnames_civicrm_navigationMenu(&$menu) {
  * @param CRM_Core_Form $form
  */
 function customfieldnames_civicrm_buildForm($formName, &$form) {
-  _customfieldnames_civix_civicrm_buildForm($formName, $form);
+  if( ($formName == 'CRM_Custom_Form_Group') && ($form->getAction() == CRM_Core_Action::ADD) ) {
+    $form->add('text', 'table_name', ts('Table Name'), '', TRUE);
+    $form->add('text', 'name', ts('Set Machine Name'), '', TRUE);
+    
+    CRM_Core_Region::instance('page-body')->add(array(
+      'template' => "CRM/LCD/customgroup.tpl"
+    ));
+    //Change label of title field
+    if ($form->elementExists('title')) {
+			$title_label = $form->getElement('title');
+      $title_label->_label = 'Set Label';
+	  }
+    //Set table name field default value
+    $defaults['table_name'] = 'civicrm_table_';
+    $form->setDefaults( $defaults );
+  }
+  if ( ($formName == 'CRM_Custom_Form_Field') && ($form->getAction() == CRM_Core_Action::ADD) ) {
+    $form->add('text', 'column_name', ts('Column Name'), '', TRUE);
+    $form->add('text', 'name', ts('Field Machine Name'), '', TRUE);
+    
+    CRM_Core_Region::instance('page-body')->add(array(
+      'template' => "CRM/LCD/customgroupfield.tpl"
+    ));
+  }
 }
 
 /**
@@ -172,5 +195,52 @@ function customfieldnames_civicrm_buildForm($formName, &$form) {
  * @param array $errors
  */
 function customfieldnames_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
-  _customfieldnames_civix_civicrm_validateForm($formName, $fields, $files, $form, $errors);
+  // Form validation for Custom Data Set
+  if ($formName == 'CRM_Custom_Form_Group' && ($form->getAction() == CRM_Core_Action::ADD) ) {
+    //validation for Group table name
+    $table_name = CRM_Utils_Array::value( 'table_name', $fields );
+    if (CRM_Core_DAO::checkTableExists($table_name)) {
+      $error_message= ts("Cannot create custom table because %1 is already exists.", array('1' => $table_name));
+      $form->setElementError('table_name', $error_message);
+    }
+    elseif ( strpos($table_name, ' ') ) {
+      $error_message= ts("Invalid table name. Table name should not have space in between words.");
+      $form->setElementError('table_name', $error_message);
+    }
+    //validation for Group name
+    $group_name = CRM_Utils_Array::value( 'name', $fields );
+    $group_params['name'] = $group_name;
+    $custom_group = civicrm_api3('CustomGroup', 'get', $group_params);
+    if ( isset($custom_group['id']) ) {
+      $error_message= ts("Cannot create custom group because %1 is already exists.", array('1' => $group_name));
+      $form->setElementError('name', $error_message);
+    }
+  }
+  // Form validation for Custom fields for a Custom Data Set
+  if($formName == 'CRM_Custom_Form_Field' && ($form->getAction() == CRM_Core_Action::ADD) ) {
+    $gid = $form->getVar( '_gid' );
+    //validation for Field Column name
+    $column_name = CRM_Utils_Array::value( 'column_name', $fields );
+    $field_params = array(
+      'custom_group_id' => $gid,
+      'column_name' => $column_name,
+    );
+    $custom_field = civicrm_api3('CustomField', 'get', $field_params);
+    if ( isset($custom_field['id']) ) {
+      $error_message= ts("Cannot create custom column because %1 is already exists.", array('1' => $column_name));
+      $form->setElementError('column_name', $error_message);
+    }
+    //validation for Field name
+    $field_name = CRM_Utils_Array::value( 'name', $fields );
+    $field_name_params = array(
+      'custom_group_id' => $gid,
+      'name' => $field_name,
+    );
+    $custom_name_field = civicrm_api3('CustomField', 'get', $field_name_params);
+    if ( isset($custom_name_field['id']) ) {
+      $error_message= ts("Cannot create custom field because %1 is already exists.", array('1' => $field_name));
+      $form->setElementError('name', $error_message);
+    }
+  }
+  return;
 }
