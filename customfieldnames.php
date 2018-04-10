@@ -129,7 +129,7 @@ function customfieldnames_civicrm_alterSettingsFolders(&$metaDataFolders = NULL)
  * @param CRM_Core_Form $form
  */
 function customfieldnames_civicrm_buildForm($formName, &$form) {
-  if(($formName == 'CRM_Custom_Form_Group') && ($form->getAction() == CRM_Core_Action::ADD)) {
+  if($formName == 'CRM_Custom_Form_Group' && $form->getAction() == CRM_Core_Action::ADD) {
     $form->add('text', 'table_name', ts('Table Name'), '', TRUE);
     $form->add('text', 'name', ts('Machine Name'), '', TRUE);
     
@@ -142,10 +142,10 @@ function customfieldnames_civicrm_buildForm($formName, &$form) {
       $title_label->_label = 'Set Title';
 	  }
     //Set table name field default value
-    $defaults['table_name'] = 'civicrm_table_';
+    $defaults['table_name'] = 'civicrm_value_';
     $form->setDefaults($defaults);
   }
-  if (($formName == 'CRM_Custom_Form_Field') && $form->getAction() == CRM_Core_Action::ADD) {
+  if ($formName == 'CRM_Custom_Form_Field' && $form->getAction() == CRM_Core_Action::ADD) {
     $form->add('text', 'column_name', ts('Column Name'), '', TRUE);
     $form->add('text', 'name', ts('Field Machine Name'), '', TRUE);
     
