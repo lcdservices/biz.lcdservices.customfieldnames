@@ -201,6 +201,10 @@ function customfieldnames_civicrm_validateForm($formName, &$fields, &$files, &$f
       $error_message= ts("Cannot create custom column because %1 already exists.", array('1' => $column_name));
       $form->setElementError('column_name', $error_message);
     }
+    elseif ( strpos($column_name, ' ') ) {
+      $error_message= ts("Invalid column name. Column name should not have space in between words.");
+      $form->setElementError('column_name', $error_message);
+    }
     //validation for Field name
     $field_name = CRM_Utils_Array::value('name', $fields);
     $field_name_params = array(
