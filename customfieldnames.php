@@ -26,7 +26,6 @@ function customfieldnames_civicrm_install() {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_uninstall
  */
 function customfieldnames_civicrm_uninstall() {
-  _customfieldnames_civix_civicrm_uninstall();
 }
 
 /**
@@ -44,7 +43,6 @@ function customfieldnames_civicrm_enable() {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_disable
  */
 function customfieldnames_civicrm_disable() {
-  _customfieldnames_civix_civicrm_disable();
 }
 
 /**
@@ -60,7 +58,7 @@ function customfieldnames_civicrm_disable() {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_upgrade
  */
 function customfieldnames_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
-  return _customfieldnames_civix_civicrm_upgrade($op, $queue);
+  return;
 }
 
 /**
@@ -167,7 +165,6 @@ function customfieldnames_civicrm_validateForm($formName, &$fields, &$files, &$f
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_postInstall
  */
 function customfieldnames_civicrm_postInstall() {
-  _customfieldnames_civix_civicrm_postInstall();
 }
 
 /**
@@ -176,5 +173,4 @@ function customfieldnames_civicrm_postInstall() {
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_entityTypes
  */
 function customfieldnames_civicrm_entityTypes(&$entityTypes) {
-  _customfieldnames_civix_civicrm_entityTypes($entityTypes);
 }
